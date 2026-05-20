@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cassidy Mangan · AI Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-900: #0B2A6B; --blue-800: #1E3A8A; --blue-700: #1D4ED8;
+    --blue-600: #2563EB; --blue-500: #3B82F6; --blue-400: #60A5FA;
+    --blue-200: #BFDBFE; --blue-100: #DBEAFE; --blue-50: #EFF6FF;
+    --white: #FFFFFF; --bg: #F8FAFC; --text: #0F172A;
+    --muted: #64748B; --border: #E2E8F0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg); color: var(--text);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: 'Fraunces', Georgia, serif; }
+
+  .container { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+
+  /* ===== Top bar ===== */
+  .topbar {
+    background: white;
+    border-bottom: 1px solid var(--border);
+    padding: 16px 0;
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(10px);
+    background: rgba(255,255,255,0.85);
+  }
+  .topbar-inner { display: flex; align-items: center; justify-content: space-between; }
+  .brand {
+    display: inline-flex; align-items: center; gap: 10px;
+    color: var(--blue-900);
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+    letter-spacing: -0.1px;
+  }
+  .brand .sq { width: 11px; height: 11px; background: var(--blue-500); border-radius: 2px; }
+  .nav-links { display: flex; gap: 24px; align-items: center; }
+  .nav-link {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: color 0.15s;
+  }
+  .nav-link:hover { color: var(--blue-700); }
+  .nav-cta {
+    background: var(--blue-700);
+    color: white !important;
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13px;
+  }
+  .nav-cta:hover { background: var(--blue-800); }
+
+  /* ===== Hero ===== */
+  .hero {
+    padding: 88px 0 72px;
+    background: linear-gradient(180deg, var(--bg) 0%, white 100%);
+  }
+  .hero-inner { max-width: 820px; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--blue-600);
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .hero-eyebrow .sq { width: 8px; height: 8px; background: var(--blue-500); border-radius: 2px; }
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 60px;
+    font-weight: 500;
+    line-height: 1.02;
+    letter-spacing: -1.5px;
+    color: var(--blue-900);
+    margin-bottom: 18px;
+  }
+  .hero h1 em { font-style: italic; color: var(--blue-700); font-weight: 500; }
+  .hero .role {
+    font-size: 22px;
+    color: var(--blue-700);
+    font-weight: 500;
+    margin-bottom: 22px;
+    letter-spacing: -0.2px;
+  }
+  .hero p.bio {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 640px;
+    line-height: 1.65;
+    font-weight: 300;
+    margin-bottom: 32px;
+  }
+  .hero p.bio strong { color: var(--text); font-weight: 600; }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--blue-700); color: white;
+    padding: 12px 22px; border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600; font-size: 14px;
+    transition: background 0.15s, transform 0.15s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { background: var(--blue-800); transform: translateY(-1px); }
+  .btn-secondary {
+    background: white; color: var(--blue-700);
+    padding: 12px 22px; border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600; font-size: 14px;
+    border: 1px solid var(--blue-200);
+    transition: all 0.15s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-secondary:hover { background: var(--blue-50); transform: translateY(-1px); }
+
+  /* ===== Projects section ===== */
+  .projects-section { padding: 56px 0 88px; }
+  .section-header {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 32px;
+  }
+  .section-title {
+    color: var(--blue-700);
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .section-title .sq { width: 8px; height: 8px; background: var(--blue-500); border-radius: 2px; }
+  .section-count {
+    color: var(--muted);
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+  }
+  .project-tile {
+    text-decoration: none; color: inherit;
+    display: flex; flex-direction: column;
+    border-radius: 14px;
+    overflow: hidden;
+    background: white;
+    border: 1px solid var(--border);
+    transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+  }
+  .project-tile:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 28px 56px -28px rgba(30, 58, 138, 0.35);
+    border-color: var(--blue-200);
+  }
+  .tile-preview {
+    aspect-ratio: 16 / 10;
+    background: var(--blue-50);
+    position: relative;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .tile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .project-tile:hover .tile-img { transform: scale(1.02); }
+  .tile-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(11, 42, 107, 0) 60%, rgba(11, 42, 107, 0.15) 100%);
+    pointer-events: none;
+  }
+  .tile-info { padding: 22px 24px 24px; }
+  .tile-num {
+    display: inline-block;
+    color: var(--blue-700);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .tile-name {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: -0.4px;
+    color: var(--blue-900);
+    margin-bottom: 8px;
+  }
+  .tile-name em { font-style: italic; color: var(--blue-700); font-weight: 500; }
+  .tile-tagline {
+    color: var(--muted);
+    font-size: 14.5px;
+    line-height: 1.55;
+    margin-bottom: 14px;
+  }
+  .tile-tagline strong { color: var(--text); font-weight: 600; }
+  .tile-bonus {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--blue-50);
+    border: 1px solid var(--blue-100);
+    color: var(--blue-700);
+    padding: 7px 13px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+  .tile-bonus .tb-dot {
+    width: 6px; height: 6px;
+    background: var(--blue-500);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .tile-bonus .arrow {
+    display: inline-block;
+    animation: bounce-down 1.6s infinite;
+  }
+  @keyframes bounce-down {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(3px); }
+    60% { transform: translateY(2px); }
+  }
+
+  .tile-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+  .tile-stack {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.2px;
+  }
+  .tile-arrow {
+    color: var(--blue-700);
+    font-size: 13px;
+    font-weight: 600;
+    transition: transform 0.2s;
+  }
+  .project-tile:hover .tile-arrow { transform: translateX(3px); }
+
+  /* ===== Contact section ===== */
+  .contact-section {
+    background: var(--blue-900);
+    color: white;
+    padding: 88px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .contact-section::before {
+    content: ""; position: absolute;
+    top: -120px; right: -120px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(191, 219, 254, 0.1), transparent);
+  }
+  .contact-inner { position: relative; z-index: 2; max-width: 680px; }
+  .contact-eyebrow {
+    color: var(--blue-200);
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 16px;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .contact-eyebrow .sq { width: 8px; height: 8px; background: var(--blue-500); border-radius: 2px; }
+  .contact-section h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 42px;
+    font-weight: 500;
+    letter-spacing: -0.8px;
+    margin-bottom: 16px;
+    line-height: 1.1;
+  }
+  .contact-section h2 em { font-style: italic; color: var(--blue-200); }
+  .contact-section p {
+    color: rgba(255,255,255,0.78);
+    font-size: 17px;
+    line-height: 1.65;
+    margin-bottom: 32px;
+    font-weight: 300;
+  }
+  .contact-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+  .contact-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: white;
+    color: var(--blue-900);
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14.5px;
+    text-decoration: none;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .contact-btn:hover { transform: translateY(-1px); box-shadow: 0 12px 24px -12px rgba(0,0,0,0.4); }
+  .contact-btn.secondary {
+    background: transparent;
+    color: white;
+    border: 1.5px solid rgba(191, 219, 254, 0.4);
+  }
+  .contact-btn.secondary:hover {
+    background: rgba(191, 219, 254, 0.1);
+    border-color: var(--blue-200);
+  }
+  .contact-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+  /* ===== Footer ===== */
+  .site-footer {
+    background: #051A20;
+    color: rgba(255,255,255,0.5);
+    padding: 28px 0;
+    text-align: center;
+    font-size: 13px;
+  }
+  .site-footer .accent-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--blue-500);
+    margin: 0 8px;
+    vertical-align: middle;
+    border-radius: 1px;
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 880px) {
+    .hero { padding: 56px 0 48px; }
+    .hero h1 { font-size: 38px; }
+    .hero .role { font-size: 17px; }
+    .hero p.bio { font-size: 15.5px; }
+    .projects-grid { grid-template-columns: 1fr; gap: 22px; }
+    .contact-section h2 { font-size: 30px; }
+    .tile-iframe { transform: scale(0.32); }
+    .nav-links { gap: 12px; }
+    .nav-link:not(.nav-cta) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="container topbar-inner">
+    <a href="#" class="brand"><span class="sq"></span> Cassidy Mangan</a>
+    <nav class="nav-links">
+      <a href="#projects" class="nav-link">Projects</a>
+      <a href="#contact" class="nav-link">Contact</a>
+      <a href="mailto:cassidymangan@gmail.com" class="nav-link nav-cta">Get in touch</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <span class="hero-eyebrow"><span class="sq"></span> AI Portfolio</span>
+      <h1>Designing AI tools for <em>commercial real estate</em>.</h1>
+      <div class="role">Working internal tools · End-to-end demos</div>
+      <p class="bio">
+        I build practical AI tools for brokers and operators — each project below is a working internal workflow, fully demoed.
+        <strong>Watch any demo in about a minute</strong> to see how the AI handles real broker tasks: pulling comps, parsing term sheets, scoring prospects, drafting outreach.
+      </p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn-primary">See the projects →</a>
+        <a href="#contact" class="btn-secondary">Get in touch</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROJECTS ===== -->
+<section class="projects-section" id="projects">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-title"><span class="sq"></span> Projects</span>
+      <span class="section-count">04 demos</span>
+    </div>
+
+    <div class="projects-grid">
+
+      <!-- Project 01 -->
+      <a class="project-tile" href="bov-assistant-demo.html" target="_blank" rel="noopener">
+        <div class="tile-preview">
+          <img class="tile-img" src="snapshot-bov.png" alt="BOV Assistant — comp approval in progress" loading="lazy">
+          <div class="tile-overlay"></div>
+        </div>
+        <div class="tile-info">
+          <div class="tile-num">Project 01</div>
+          <div class="tile-name">BOV <em>Assistant</em></div>
+          <p class="tile-tagline">An AI assistant that builds a <strong>$15M valuation deck in 4 minutes</strong> instead of 4 hours. 5 gated phases, learning loop, photo skill, brand-perfect PPTX output.</p>
+          <div class="tile-bonus">
+            <span class="tb-dot"></span>
+            <span>Includes final deck · scroll to view</span>
+            <span class="arrow">↓</span>
+          </div>
+          <div class="tile-footer">
+            <span class="tile-stack">PptxGenJS · Photo skill · 558-row comp DB</span>
+            <span class="tile-arrow">Watch demo →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Project 02 -->
+      <a class="project-tile" href="site-plan-3d.html" target="_blank" rel="noopener">
+        <div class="tile-preview">
+          <img class="tile-img" src="snapshot-site-plan-3d.png" alt="Site Plan to 3D — buildings extruded in 3D view" loading="lazy">
+          <div class="tile-overlay"></div>
+        </div>
+        <div class="tile-info">
+          <div class="tile-num">Project 02</div>
+          <div class="tile-name">Site Plan → <em>3D</em></div>
+          <p class="tile-tagline">Trace site plan drawings into <strong>interactive 3D models</strong>. Upload a plan, outline buildings, set heights, orbit the result. Zero external dependencies — pure canvas.</p>
+          <div class="tile-footer">
+            <span class="tile-stack">Canvas 3D · Polygon extrusion · Affine projection</span>
+            <span class="tile-arrow">Watch demo →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Project 03 -->
+      <a class="project-tile" href="lease-underwriting-demo.html" target="_blank" rel="noopener">
+        <div class="tile-preview">
+          <img class="tile-img" src="snapshot-underwriting.png" alt="Lease Underwriting — scenarios scored with cumulative cash flow chart" loading="lazy">
+          <div class="tile-overlay"></div>
+        </div>
+        <div class="tile-info">
+          <div class="tile-num">Project 03</div>
+          <div class="tile-name">Lease <em>Underwriting</em></div>
+          <p class="tile-tagline">Drop in lease term sheets — the AI extracts assumptions, <strong>runs NPV across every scenario</strong>, and recommends the strongest option with a client-ready report.</p>
+          <div class="tile-bonus">
+            <span class="tb-dot"></span>
+            <span>Includes client report · scroll to view</span>
+            <span class="arrow">↓</span>
+          </div>
+          <div class="tile-footer">
+            <span class="tile-stack">AI parsing · NPV engine · PptxGenJS report</span>
+            <span class="tile-arrow">Watch demo →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Project 04 -->
+      <a class="project-tile" href="prospecting-demo.html" target="_blank" rel="noopener">
+        <div class="tile-preview">
+          <img class="tile-img" src="snapshot-prospecting.png" alt="Prospecting — top 5 ranked, Acme detail open, email drafting" loading="lazy">
+          <div class="tile-overlay"></div>
+        </div>
+        <div class="tile-info">
+          <div class="tile-num">Project 04</div>
+          <div class="tile-name"><em>Prospecting</em></div>
+          <p class="tile-tagline">Find tenants about to be in-market. AI scores prospects by signals (lease, growth, funding) and <strong>drafts outreach in your broker's voice</strong> — then sends.</p>
+          <div class="tile-footer">
+            <span class="tile-stack">Signal scoring · Voice-matched LLM · Pipeline tracker</span>
+            <span class="tile-arrow">Watch demo →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Project 05 -->
+      <a class="project-tile" href="trade-area-xray-demo.html" target="_blank" rel="noopener">
+        <div class="tile-preview">
+          <img class="tile-img" src="snapshot-trade-area-xray.png" alt="Trade Area X-Ray — drive-time rings, demographics, co-tenant scan, site fit scorecard" loading="lazy">
+          <div class="tile-overlay"></div>
+        </div>
+        <div class="tile-info">
+          <div class="tile-num">Project 05</div>
+          <div class="tile-name">Trade Area <em>X-Ray</em></div>
+          <p class="tile-tagline">Drop a pin on any candidate site. The AI pulls demographics, draws drive-time isochrones, scans co-tenants and competitors, and <strong>returns a site-fit score in under a minute</strong>.</p>
+          <div class="tile-footer">
+            <span class="tile-stack">Isochrones · POI scan · Weighted scorecard</span>
+            <span class="tile-arrow">Watch demo →</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section class="contact-section" id="contact">
+  <div class="container">
+    <div class="contact-inner">
+      <span class="contact-eyebrow"><span class="sq"></span> Get in touch</span>
+      <h2>Have a workflow that needs <em>shipping?</em></h2>
+      <p>Always happy to talk about AI tools for CRE — what's worth building, what's not, and what the bar should be. The fastest way to reach me is below.</p>
+      <div class="contact-buttons">
+        <a href="mailto:cassidymangan@gmail.com" class="contact-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          cassidymangan@gmail.com
+        </a>
+        <a href="https://linkedin.com/in/cassidymangan" target="_blank" rel="noopener" class="contact-btn secondary">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+          </svg>
+          LinkedIn
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    Cassidy Mangan <span class="accent-dot"></span> AI Portfolio · 2026
+  </div>
+</footer>
+
+</body>
+</html>

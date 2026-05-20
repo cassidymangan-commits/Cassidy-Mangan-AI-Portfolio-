@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Site Plan → 3D · AI Portfolio · Project 02</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-900: #0B2A6B; --blue-800: #1E3A8A; --blue-700: #1D4ED8;
+    --blue-600: #2563EB; --blue-500: #3B82F6; --blue-400: #60A5FA;
+    --blue-200: #BFDBFE; --blue-100: #DBEAFE; --blue-50: #EFF6FF;
+    --white: #FFFFFF; --bg: #F8FAFC; --text: #0F172A;
+    --muted: #64748B; --border: #E2E8F0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg); color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 40px 24px;
+  }
+  code, .mono { font-family: 'JetBrains Mono', monospace; }
+  .page-title { text-align: center; margin-bottom: 28px; max-width: 980px; }
+  .page-title .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--blue-600);
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .page-title .eyebrow .sq { width: 8px; height: 8px; background: var(--blue-500); border-radius: 2px; }
+  .page-title h1 { font-size: 32px; color: var(--blue-900); font-weight: 600; letter-spacing: -0.5px; margin-bottom: 8px; }
+  .page-title p { color: var(--muted); font-size: 15px; max-width: 600px; margin: 0 auto; }
+  .demo-wrap { width: 100%; max-width: 1080px; }
+  .demo-frame {
+    background: var(--white); border-radius: 16px;
+    border: 1px solid var(--border); overflow: hidden;
+    box-shadow: 0 24px 64px -24px rgba(30, 58, 138, 0.18);
+  }
+  .demo-progress { height: 3px; background: var(--blue-50); overflow: hidden; }
+  .demo-progress-bar { height: 100%; background: var(--blue-500); width: 0%; transition: width 0.4s linear; }
+  .demo-header {
+    background: var(--blue-900); color: white; padding: 16px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .demo-header-left { display: flex; align-items: center; gap: 14px; }
+  .brand-mark { display: inline-flex; align-items: center; gap: 8px; color: white; font-size: 16px; font-weight: 700; letter-spacing: 0.3px; }
+  .brand-mark .sq { width: 12px; height: 12px; background: var(--blue-500); border-radius: 2px; }
+  .demo-header-title { font-size: 14px; font-weight: 500; color: var(--blue-200); }
+  .phase-pill {
+    background: rgba(191, 219, 254, 0.15);
+    border: 1px solid rgba(191, 219, 254, 0.3);
+    color: var(--blue-200); padding: 5px 12px; border-radius: 999px;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.4px;
+  }
+  .demo-stage { position: relative; background: var(--blue-900); height: 620px; overflow: hidden; }
+  #scene-canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+  .demo-caption {
+    position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
+    background: rgba(255,255,255,0.96); backdrop-filter: blur(8px);
+    border-radius: 999px; padding: 8px 18px;
+    font-size: 13px; color: var(--blue-900);
+    box-shadow: 0 8px 24px -8px rgba(0,0,0,0.3);
+    z-index: 100; font-weight: 500;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .demo-caption .live-dot { width: 6px; height: 6px; background: var(--blue-600); border-radius: 50%; animation: pulse 1.6s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+  .demo-caption strong { color: var(--blue-700); font-weight: 600; }
+  .demo-controls { background: white; border-top: 1px solid var(--border); padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; }
+  .play-status { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--muted); }
+  .play-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue-500); animation: pulse 1.6s infinite; }
+  .play-dot.idle { background: var(--muted); animation: none; }
+  .timer { color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  .replay-btn {
+    background: var(--blue-700); color: white; border: none;
+    padding: 9px 18px; border-radius: 6px;
+    font-family: inherit; font-size: 13px; font-weight: 600;
+    cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+    transition: background 0.15s, transform 0.15s;
+  }
+  .replay-btn:hover { background: var(--blue-800); transform: translateY(-1px); }
+  .replay-btn:active { transform: translateY(0); }
+  .replay-btn:disabled { opacity: 0.55; cursor: default; transform: none; }
+  .workflow-overlay {
+    position: absolute; top: 14px; left: 14px;
+    background: rgba(255,255,255,0.96); backdrop-filter: blur(8px);
+    border-radius: 10px; padding: 14px 16px;
+    box-shadow: 0 8px 24px -8px rgba(0,0,0,0.2);
+    z-index: 100; width: 240px;
+  }
+  .workflow-overlay .wf-title { font-size: 10px; font-weight: 700; color: var(--blue-700); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; }
+  .wf-step { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 12.5px; color: var(--muted); transition: color 0.3s; }
+  .wf-step .wf-num { width: 22px; height: 22px; border-radius: 50%; background: var(--bg); color: var(--muted); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; border: 1px solid var(--border); transition: all 0.3s; }
+  .wf-step.active { color: var(--blue-900); font-weight: 600; }
+  .wf-step.active .wf-num { background: var(--blue-600); color: white; border-color: var(--blue-600); }
+  .wf-step.done .wf-num { background: #16A34A; color: white; border-color: #16A34A; }
+  .wf-step.done { color: var(--text); }
+  .building-overlay { position: absolute; top: 14px; right: 14px; background: rgba(255,255,255,0.96); backdrop-filter: blur(8px); border-radius: 10px; padding: 14px 16px; box-shadow: 0 8px 24px -8px rgba(0,0,0,0.2); z-index: 100; width: 220px; display: none; }
+  .building-overlay.visible { display: block; }
+  .building-overlay .bo-title { font-size: 10px; font-weight: 700; color: var(--blue-700); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; }
+  .building-item { background: var(--blue-50); padding: 8px 11px; border-radius: 6px; margin-bottom: 6px; font-size: 12px; color: var(--blue-900); display: flex; justify-content: space-between; align-items: center; animation: itemIn 0.4s ease-out both; }
+  @keyframes itemIn { from { opacity: 0; transform: translateX(8px); } to { opacity: 1; transform: translateX(0); } }
+  .building-item .b-name { font-weight: 600; }
+  .building-item .b-height { color: var(--muted); font-size: 11px; }
+  .mode-tag { position: absolute; bottom: 16px; left: 16px; background: rgba(255,255,255,0.96); color: var(--blue-700); padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 4px 12px -4px rgba(0,0,0,0.2); z-index: 100; }
+  .play-overlay { position: absolute; inset: 0; background: rgba(11, 42, 107, 0.88); backdrop-filter: blur(8px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 200; cursor: pointer; transition: opacity 0.4s; }
+  .play-overlay.hidden { opacity: 0; pointer-events: none; }
+  .play-overlay .play-circle { width: 84px; height: 84px; background: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 32px -8px rgba(0,0,0,0.4); margin-bottom: 18px; transition: transform 0.2s; }
+  .play-overlay:hover .play-circle { transform: scale(1.05); }
+  .play-overlay .play-circle::before { content: ""; width: 0; height: 0; border-left: 24px solid var(--blue-700); border-top: 16px solid transparent; border-bottom: 16px solid transparent; margin-left: 6px; }
+  .play-overlay .play-label { color: white; font-size: 17px; font-weight: 600; }
+  .play-overlay .play-sub { color: var(--blue-200); font-size: 13px; margin-top: 6px; }
+  @media (max-width: 720px) { body { padding: 20px 12px; } .page-title h1 { font-size: 24px; } .demo-stage { height: 480px; } .workflow-overlay, .building-overlay { width: 170px; padding: 10px 12px; font-size: 11px; } .wf-step { font-size: 11px; } }
+</style>
+</head>
+<body>
+<div class="demo-wrap">
+  <div class="page-title">
+    <span class="eyebrow"><span class="sq"></span> AI Portfolio · Project 02</span>
+    <h1>Site Plan → 3D</h1>
+    <p>Trace site plan drawings into interactive 3D models. Watch a project run end to end — about 25 seconds.</p>
+  </div>
+  <div class="demo-frame">
+    <div class="demo-progress"><div class="demo-progress-bar" id="progressBar"></div></div>
+    <div class="demo-header">
+      <div class="demo-header-left">
+        <span class="brand-mark"><span class="sq"></span> SITE PLAN</span>
+        <span class="demo-header-title">3D Tracer</span>
+      </div>
+      <span class="phase-pill" id="phasePill">Click play to begin</span>
+    </div>
+    <div class="demo-stage" id="stage">
+      <div class="workflow-overlay">
+        <div class="wf-title">Workflow</div>
+        <div class="wf-step" id="wf-1"><div class="wf-num">1</div><div>Upload site plan</div></div>
+        <div class="wf-step" id="wf-2"><div class="wf-num">2</div><div>Trace buildings</div></div>
+        <div class="wf-step" id="wf-3"><div class="wf-num">3</div><div>View in 3D</div></div>
+      </div>
+      <div class="building-overlay" id="buildingOverlay">
+        <div class="bo-title">Buildings (<span id="bldgCount">0</span>)</div>
+        <div id="buildingList"></div>
+      </div>
+      <div class="demo-caption" id="captionBar"><span class="live-dot"></span><span id="captionText">Ready</span></div>
+      <canvas id="scene-canvas"></canvas>
+      <div class="mode-tag" id="modeTag">📐 Trace mode</div>
+      <div class="play-overlay" id="playOverlay" onclick="startFromOverlay()">
+        <div class="play-circle"></div>
+        <div class="play-label">Play demo</div>
+        <div class="play-sub">Watch a site plan turn into 3D · ~25 seconds</div>
+      </div>
+    </div>
+    <div class="demo-controls">
+      <div class="play-status">
+        <span class="play-dot idle" id="playDot"></span>
+        <span id="playStatus">Click play to start</span>
+        <span class="timer" id="timer">0:00 / 0:25</span>
+      </div>
+      <button class="replay-btn" id="replayBtn" onclick="restartDemo()">▶ Play demo</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SITE_PLAN_DATA_URL = "data:image/png;base64,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";
+const DEMO_BUILDINGS = [
+  { label: 'Building A', height: 38, points: [{x:180,y:120},{x:600,y:120},{x:600,y:340},{x:180,y:340}] },
+  { label: 'Building B', height: 28, points: [{x:720,y:130},{x:1080,y:130},{x:1080,y:320},{x:720,y:320}] },
+  { label: 'Building C', height: 18, points: [{x:1130,y:150},{x:1330,y:150},{x:1330,y:300},{x:1130,y:300}] }
+];
+
+const stage = document.getElementById('stage');
+const canvas = document.getElementById('scene-canvas');
+const ctx = canvas.getContext('2d');
+let dpr = 1;
+
+const state = {
+  image: null, imgW: 0, imgH: 0,
+  buildings: [], tracing: false, currentPoints: [], currentSpec: null,
+  mode: 'trace',
+  yaw: Math.PI / 4,
+  pitch: 0.62,
+};
+
+function resizeCanvas() {
+  dpr = window.devicePixelRatio || 1;
+  canvas.width = stage.clientWidth * dpr;
+  canvas.height = stage.clientHeight * dpr;
+  canvas.style.width = stage.clientWidth + 'px';
+  canvas.style.height = stage.clientHeight + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  draw();
+}
+window.addEventListener('resize', resizeCanvas);
+
+// ===== TRACE MODE =====
+function drawTrace() {
+  const w = stage.clientWidth, h = stage.clientHeight;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.fillStyle = '#0B2A6B';
+  ctx.fillRect(0, 0, w, h);
+  if (!state.image) return;
+  const pad = 50;
+  const s = Math.min((w - pad*2) / state.imgW, (h - pad*2) / state.imgH);
+  const dx = (w - state.imgW * s) / 2;
+  const dy = (h - state.imgH * s) / 2;
+  ctx.save();
+  ctx.translate(dx, dy); ctx.scale(s, s);
+  ctx.drawImage(state.image, 0, 0);
+  state.buildings.forEach(b => drawPolygon2D(b.points, false, false, s));
+  state.buildings.forEach(b => drawLabel2D(b.points, b.label, s));
+  if (state.tracing && state.currentPoints.length > 0) drawPolygon2D(state.currentPoints, true, true, s);
+  ctx.restore();
+}
+function drawPolygon2D(points, selected, inProgress, scaleHint) {
+  if (!points.length) return;
+  const accent = '#2563EB';
+  const z = scaleHint;
+  ctx.beginPath();
+  ctx.moveTo(points[0].x, points[0].y);
+  for (let i = 1; i < points.length; i++) ctx.lineTo(points[i].x, points[i].y);
+  if (!inProgress && points.length >= 3) ctx.closePath();
+  if (points.length >= 3) { ctx.fillStyle = accent + (selected ? 'AA' : '55'); ctx.fill(); }
+  ctx.strokeStyle = accent;
+  ctx.lineWidth = (selected ? 3 : 2) / z;
+  ctx.stroke();
+  ctx.fillStyle = accent;
+  const r = (selected ? 7 : 5) / z;
+  points.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, Math.PI*2); ctx.fill(); });
+}
+function drawLabel2D(points, text, z) {
+  let cx = 0, cy = 0;
+  points.forEach(p => { cx += p.x; cy += p.y; });
+  cx /= points.length; cy /= points.length;
+  ctx.font = `bold ${16/z}px Inter, sans-serif`;
+  const m = ctx.measureText(text), pad = 8/z;
+  const w = m.width + pad*2, h = 24/z;
+  ctx.fillStyle = 'rgba(11,42,107,0.92)';
+  ctx.fillRect(cx-w/2, cy-h/2, w, h);
+  ctx.fillStyle = 'white'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(text, cx, cy);
+  ctx.textAlign = 'start'; ctx.textBaseline = 'alphabetic';
+}
+
+// ===== 3D MODE =====
+function project3D(x, y, z, cx, cy, scale) {
+  const cyw = Math.cos(state.yaw), syw = Math.sin(state.yaw);
+  const xr = x * cyw - z * syw;
+  const zr = x * syw + z * cyw;
+  const cp = Math.cos(state.pitch), sp = Math.sin(state.pitch);
+  const sx = cx + xr * scale;
+  const sy = cy + (zr * sp - y * cp) * scale;
+  const depth = zr * cp + y * sp;
+  return { sx, sy, depth };
+}
+
+function getViewCenter() {
+  // Building cluster center (in IMAGE coords) — so camera looks at the buildings
+  if (state.buildings.length === 0) return { x: state.imgW / 2, z: state.imgH / 2 };
+  let cx = 0, cz = 0, n = 0;
+  state.buildings.forEach(b => {
+    b.points.forEach(p => { cx += p.x; cz += p.y; n++; });
+  });
+  return { x: cx / n, z: cz / n };
+}
+
+function drawGround(cx, cy, scale, offsetX, offsetZ) {
+  if (!state.image) return;
+  const W = state.imgW, H = state.imgH;
+  const cyw = Math.cos(state.yaw), syw = Math.sin(state.yaw);
+  const sp = Math.sin(state.pitch);
+  // Affine matrix that maps image pixel (u, v) → screen (sx, sy):
+  //   sx = scale*cyw * u + (-scale*syw) * v + (cx - scale*offsetX*cyw + scale*offsetZ*syw)
+  //   sy = scale*sp*syw * u + (scale*sp*cyw) * v + (cy - scale*sp*offsetX*syw - scale*sp*offsetZ*cyw)
+  const A = scale * cyw;
+  const B = -scale * syw;
+  const C = scale * sp * syw;
+  const D = scale * sp * cyw;
+  const E = cx + scale * (-offsetX * cyw + offsetZ * syw);
+  const F = cy + scale * sp * (-offsetX * syw - offsetZ * cyw);
+  ctx.save();
+  // canvas: ctx.transform(a, b, c, d, e, f) → x' = a*x + c*y + e, y' = b*x + d*y + f
+  // we want sx = A*u + B*v + E, sy = C*u + D*v + F → pass (A, C, B, D, E, F)
+  ctx.transform(A, C, B, D, E, F);
+  ctx.imageSmoothingEnabled = true;
+  ctx.drawImage(state.image, 0, 0);
+  ctx.restore();
+}
+
+function shadeColor(hex, k) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgb(${Math.round(r*k)}, ${Math.round(g*k)}, ${Math.round(b*k)})`;
+}
+
+function draw3D() {
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const w = stage.clientWidth, h = stage.clientHeight;
+  // Sky gradient
+  const grad = ctx.createLinearGradient(0, 0, 0, h);
+  grad.addColorStop(0, '#DBEAFE');
+  grad.addColorStop(1, '#EFF6FF');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, w, h);
+  if (!state.image) return;
+
+  const cx = w / 2;
+  const cy = h * 0.6;
+  const scale = Math.min(w, h) * 0.7 / Math.max(state.imgW, state.imgH);
+  const heightScale = 4; // visual scale: ~4 px per foot — reasonable warehouse proportions
+
+  const center = getViewCenter();
+
+  // === GROUND (textured site plan) ===
+  drawGround(cx, cy, scale, center.x, center.z);
+
+  // === BUILDINGS — collect faces, project, sort, draw ===
+  const faces = [];
+  state.buildings.forEach(b => {
+    const baseCorners = b.points.map(p => ({ x: p.x - center.x, y: 0, z: p.y - center.z }));
+    const topCorners  = b.points.map(p => ({ x: p.x - center.x, y: b.height * heightScale, z: p.y - center.z }));
+    for (let i = 0; i < baseCorners.length; i++) {
+      const n = (i + 1) % baseCorners.length;
+      const wallVecX = baseCorners[n].x - baseCorners[i].x;
+      const wallVecZ = baseCorners[n].z - baseCorners[i].z;
+      // Outward normal (perpendicular to wall in xz plane)
+      const nx = wallVecZ, nz = -wallVecX;
+      const len = Math.sqrt(nx*nx + nz*nz) || 1;
+      const lightX = Math.cos(state.yaw - Math.PI / 2);
+      const lightZ = Math.sin(state.yaw - Math.PI / 2);
+      const dot = (nx * lightX + nz * lightZ) / len;
+      const lambert = Math.max(0.55, Math.min(1.0, 0.7 + dot * 0.3));
+      faces.push({
+        corners: [baseCorners[i], baseCorners[n], topCorners[n], topCorners[i]],
+        fillFn: () => shadeColor('#2563EB', lambert),
+        strokeFn: () => '#0B2A6B',
+        lineWidth: 1.2
+      });
+    }
+    faces.push({
+      corners: topCorners,
+      fillFn: () => '#3B82F6',
+      strokeFn: () => '#0B2A6B',
+      lineWidth: 1.5,
+      isTop: true,
+      buildingRef: b
+    });
+  });
+
+  faces.forEach(f => {
+    f.projected = f.corners.map(c => project3D(c.x, c.y, c.z, cx, cy, scale));
+    f.depthAvg = f.projected.reduce((s, p) => s + p.depth, 0) / f.projected.length;
+  });
+  faces.sort((a, b) => a.depthAvg - b.depthAvg);
+
+  faces.forEach(f => {
+    ctx.beginPath();
+    f.projected.forEach((p, i) => { if (i === 0) ctx.moveTo(p.sx, p.sy); else ctx.lineTo(p.sx, p.sy); });
+    ctx.closePath();
+    const fill = f.fillFn();
+    if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+    const stroke = f.strokeFn();
+    if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = f.lineWidth; ctx.stroke(); }
+  });
+
+  // Labels above buildings
+  state.buildings.forEach(b => {
+    let bx = 0, bz = 0;
+    b.points.forEach(p => { bx += p.x - center.x; bz += p.y - center.z; });
+    bx /= b.points.length; bz /= b.points.length;
+    const labelY = b.height * heightScale + 60;
+    const pr = project3D(bx, labelY, bz, cx, cy, scale);
+    ctx.font = 'bold 12.5px Inter, sans-serif';
+    const text = b.label + ' · ' + b.height + ' ft';
+    const m = ctx.measureText(text), pad = 7;
+    ctx.fillStyle = 'rgba(11,42,107,0.94)';
+    ctx.fillRect(pr.sx - m.width/2 - pad, pr.sy - 11, m.width + pad*2, 22);
+    ctx.fillStyle = 'white';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(text, pr.sx, pr.sy);
+    ctx.textAlign = 'start'; ctx.textBaseline = 'alphabetic';
+  });
+}
+
+function draw() {
+  if (state.mode === 'trace') drawTrace();
+  else draw3D();
+}
+
+// ===== Demo controller =====
+const TOTAL_DURATION = 25000;
+let demoStart = 0;
+let progressInterval = null;
+let demoAborted = false;
+let waitTimeouts = [];
+let cameraAnimId = null;
+
+function wait(ms) { return new Promise(r => { const t = setTimeout(() => r(), ms); waitTimeouts.push(t); }); }
+function setPhase(t) { document.getElementById('phasePill').textContent = t; }
+function setCaption(h) { document.getElementById('captionText').innerHTML = h; }
+function setMode(t) { document.getElementById('modeTag').innerHTML = t; }
+function markStep(num, status) {
+  const s = document.getElementById(`wf-${num}`); if (!s) return;
+  s.classList.remove('active', 'done');
+  if (status === 'active') s.classList.add('active');
+  else if (status === 'done') s.classList.add('done');
+}
+function formatTime(secs) { const m = Math.floor(secs/60), s = Math.floor(secs%60); return `${m}:${s.toString().padStart(2,'0')}`; }
+function startProgress() {
+  demoStart = Date.now();
+  if (progressInterval) clearInterval(progressInterval);
+  progressInterval = setInterval(() => {
+    const elapsed = (Date.now() - demoStart) / 1000;
+    document.getElementById('progressBar').style.width = Math.min(100, elapsed/(TOTAL_DURATION/1000)*100) + '%';
+    document.getElementById('timer').textContent = `${formatTime(elapsed)} / ${formatTime(TOTAL_DURATION/1000)}`;
+  }, 200);
+}
+function stopProgress() {
+  if (progressInterval) clearInterval(progressInterval);
+  document.getElementById('progressBar').style.width = '100%';
+  document.getElementById('playDot').classList.add('idle');
+  document.getElementById('playStatus').textContent = 'Demo complete';
+  const btn = document.getElementById('replayBtn');
+  btn.disabled = false; btn.textContent = '↻ Replay';
+}
+function abortDemo() {
+  demoAborted = true;
+  waitTimeouts.forEach(t => clearTimeout(t)); waitTimeouts = [];
+  if (progressInterval) clearInterval(progressInterval);
+  if (cameraAnimId) cancelAnimationFrame(cameraAnimId);
+}
+function updateBuildingList() {
+  const overlay = document.getElementById('buildingOverlay');
+  document.getElementById('bldgCount').textContent = state.buildings.length;
+  if (state.buildings.length > 0) overlay.classList.add('visible');
+  document.getElementById('buildingList').innerHTML = state.buildings.map(b =>
+    `<div class="building-item"><span class="b-name">${b.label}</span><span class="b-height">${b.height} ft</span></div>`
+  ).join('');
+}
+function loadDemoImage() {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => { state.image = img; state.imgW = img.width; state.imgH = img.height; draw(); resolve(); };
+    img.onerror = () => { setCaption('⚠ Could not load image'); resolve(); };
+    img.src = SITE_PLAN_DATA_URL;
+  });
+}
+async function traceBuilding(spec) {
+  state.tracing = true; state.currentPoints = []; state.currentSpec = spec;
+  setCaption(`Tracing <strong>${spec.label}</strong> · placing corners`);
+  for (let i = 0; i < spec.points.length; i++) {
+    await wait(380); if (demoAborted) return;
+    state.currentPoints.push(spec.points[i]); draw();
+    setCaption(`<strong>${i+1}</strong> point${i?'s':''} placed for <strong>${spec.label}</strong>`);
+  }
+  await wait(650); if (demoAborted) return;
+  setCaption(`✓ <strong>${spec.label}</strong> closed (${spec.height} ft)`);
+  state.buildings.push({ label: spec.label, height: spec.height, points: [...spec.points] });
+  state.tracing = false; state.currentPoints = [];
+  draw(); updateBuildingList();
+}
+async function runDemo() {
+  demoAborted = false;
+  state.buildings = []; state.tracing = false; state.currentPoints = [];
+  state.mode = 'trace'; state.yaw = Math.PI / 4; state.pitch = 0.62;
+  updateBuildingList();
+  document.getElementById('buildingOverlay').classList.remove('visible');
+  [1,2,3].forEach(n => markStep(n, null));
+  document.getElementById('progressBar').style.width = '0%';
+  document.getElementById('playDot').classList.remove('idle');
+  document.getElementById('playStatus').textContent = 'Playing demo';
+  const btn = document.getElementById('replayBtn');
+  btn.disabled = true; btn.textContent = '▶ Playing…';
+  document.getElementById('playOverlay').classList.add('hidden');
+  setMode('📐 Trace mode');
+  startProgress();
+  try {
+    setPhase('Phase 1 · Loading plan');
+    markStep(1, 'active');
+    setCaption('Uploading site plan image...');
+    await wait(700); if (demoAborted) return;
+    await loadDemoImage(); if (demoAborted) return;
+    setCaption('✓ Site plan loaded · 1400×900 pixels');
+    markStep(1, 'done');
+    await wait(700);
+    if (demoAborted) return;
+    setPhase('Phase 2 · Tracing buildings');
+    markStep(2, 'active');
+    for (const spec of DEMO_BUILDINGS) {
+      if (demoAborted) return;
+      await traceBuilding(spec);
+      await wait(450);
+    }
+    if (demoAborted) return;
+    markStep(2, 'done');
+    setCaption(`✓ <strong>${state.buildings.length} buildings</strong> outlined`);
+    await wait(800); if (demoAborted) return;
+    setPhase('Phase 3 · 3D view');
+    markStep(3, 'active');
+    setCaption('Lifting buildings into 3D...');
+    setMode('🏢 3D mode');
+    state.mode = '3d'; draw();
+    await wait(900); if (demoAborted) return;
+    setCaption('Orbiting camera · 3D model with textured ground');
+    const orbitDuration = 7500;
+    const orbitStart = Date.now();
+    const startYaw = state.yaw;
+    function orbit() {
+      if (demoAborted) return;
+      const elapsed = Date.now() - orbitStart;
+      if (elapsed > orbitDuration) {
+        markStep(3, 'done');
+        setCaption('✓ Demo complete · replay below');
+        setPhase('Complete');
+        stopProgress();
+        return;
+      }
+      const t = elapsed / orbitDuration;
+      state.yaw = startYaw + t * Math.PI * 1.5;
+      draw();
+      cameraAnimId = requestAnimationFrame(orbit);
+    }
+    orbit();
+  } catch (err) {
+    console.error(err);
+    setCaption('⚠ Error: ' + err.message);
+    stopProgress();
+  }
+}
+function restartDemo() { abortDemo(); setTimeout(runDemo, 200); }
+function startFromOverlay() {
+  document.getElementById('playOverlay').classList.add('hidden');
+  setTimeout(runDemo, 100);
+}
+window.addEventListener('load', () => setTimeout(resizeCanvas, 100));
+</script>
+
+</body>
+</html>
