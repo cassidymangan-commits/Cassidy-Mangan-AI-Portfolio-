@@ -339,6 +339,60 @@
     border-radius: 1px;
   }
 
+  /* ===== Site → Signed tile placeholder (no snapshot yet) ===== */
+  .s2s-preview {
+    width: 100%; height: 100%;
+    background:
+      radial-gradient(120% 120% at 78% 18%, rgba(255,178,36,0.16), transparent 55%),
+      linear-gradient(160deg, #1b2530 0%, #131a22 60%, #0d1319 100%);
+    position: relative;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    padding: 18px 20px;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .project-tile:hover .s2s-preview { transform: scale(1.02); }
+  .s2s-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(95,168,245,0.13) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(95,168,245,0.13) 1px, transparent 1px);
+    background-size: 34px 34px;
+    -webkit-mask-image: radial-gradient(120% 90% at 60% 42%, #000 35%, transparent 78%);
+    mask-image: radial-gradient(120% 90% at 60% 42%, #000 35%, transparent 78%);
+  }
+  .s2s-parcel {
+    position: absolute;
+    border: 2px solid #FFB224;
+    background: rgba(255,178,36,0.16);
+    border-radius: 3px;
+  }
+  .s2s-wordmark {
+    position: relative; z-index: 2;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600; font-size: 12px;
+    letter-spacing: 0.18em;
+    color: #FFB224;
+  }
+  .s2s-card {
+    position: relative; z-index: 2;
+    align-self: flex-start;
+    background: rgba(19,26,34,0.82);
+    border: 1px solid #33414F;
+    border-radius: 9px;
+    padding: 10px 13px;
+    backdrop-filter: blur(2px);
+    max-width: 80%;
+  }
+  .s2s-card .a { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 15px; color: #E8EDF2; }
+  .s2s-card .o { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #FFB224; margin-top: 2px; }
+  .s2s-chips { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+  .s2s-chips span {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    color: #8A97A5; border: 1px solid #33414F; border-radius: 5px;
+    padding: 3px 6px;
+  }
+
   /* ===== Responsive ===== */
   @media (max-width: 880px) {
     .hero { padding: 56px 0 48px; }
@@ -390,7 +444,7 @@
   <div class="container">
     <div class="section-header">
       <span class="section-title"><span class="sq"></span> Projects</span>
-      <span class="section-count">05 demos</span>
+      <span class="section-count">06 demos</span>
     </div>
 
     <div class="projects-grid">
@@ -485,6 +539,36 @@
           <p class="tile-tagline">Drop a pin on any candidate site. The AI pulls demographics, draws drive-time isochrones, scans co-tenants and competitors, and <strong>returns a site-fit score in under a minute</strong>.</p>
           <div class="tile-footer">
             <span class="tile-stack">Isochrones · POI scan · Weighted scorecard</span>
+            <span class="tile-arrow">Watch demo →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Project 06 -->
+      <a class="project-tile" href="site-to-signed-demo.html" target="_blank" rel="noopener">
+        <div class="tile-preview">
+          <div class="s2s-preview">
+            <div class="s2s-grid"></div>
+            <div class="s2s-parcel" style="left:47%;top:28%;width:30%;height:36%"></div>
+            <div class="s2s-wordmark">SITE&#8594;SIGNED</div>
+            <div class="s2s-card">
+              <div class="a">4820 Foundry Row</div>
+              <div class="o">IRONGATE HOLDINGS LLC</div>
+              <div class="s2s-chips"><span>58,200 SF</span><span>4.21 AC</span><span>INDUSTRIAL</span></div>
+            </div>
+          </div>
+          <div class="tile-overlay"></div>
+        </div>
+        <div class="tile-info">
+          <div class="tile-num">Project 06</div>
+          <div class="tile-name">Site → <em>Signed</em></div>
+          <p class="tile-tagline">Tap any parcel on the map — the AI pulls the <strong>county auditor record</strong> (owner, SF, sale history), assembles adjacent lots, scores comps and flags the bad ones, then drafts a <strong>BOV you can send from the parking lot</strong>.</p>
+          <div class="tile-bonus">
+            <span class="tb-dot"></span>
+            <span>Auto-playing walkthrough · press ▶</span>
+          </div>
+          <div class="tile-footer">
+            <span class="tile-stack">Leaflet · CAGIS parcels · Turf.js · BOV generator</span>
             <span class="tile-arrow">Watch demo →</span>
           </div>
         </div>
